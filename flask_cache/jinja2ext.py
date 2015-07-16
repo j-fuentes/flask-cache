@@ -77,7 +77,7 @@ class CacheExtension(Extension):
 
         #: Delete key if timeout is 'del'
         if timeout == "del":
-            cache.delete(key)
+            #cache.delete(key)
             return caller()
 
         rv = cache.get(key)
