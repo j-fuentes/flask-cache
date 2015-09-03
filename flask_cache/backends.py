@@ -6,7 +6,7 @@ from ._compat import range_type
 
 class SASLMemcachedCache(MemcachedCache):
 
-    def __init__(self, servers=None, default_timeout=300, key_prefix=None,
+    def __init__(self, servers=None, default_timeout=None, key_prefix=None,
                  username=None, password=None):
         BaseCache.__init__(self, default_timeout)
 
@@ -26,28 +26,33 @@ def null(app, config, args, kwargs):
     return NullCache()
 
 def simple(app, config, args, kwargs):
-    kwargs.update(dict(threshold=config['CACHE_THRESHOLD']))
+    kwargs.update(dict(threshold=config['CACHE_THRESHOLD'],
+                       default_timeout=config['CACHE_DEFAULT_TIMEOUT']))
     return SimpleCache(*args, **kwargs)
 
 def memcached(app, config, args, kwargs):
     args.append(config['CACHE_MEMCACHED_SERVERS'])
-    kwargs.update(dict(key_prefix=config['CACHE_KEY_PREFIX']))
+    kwargs.update(dict(key_prefix=config['CACHE_KEY_PREFIX'],
+                       default_timeout=config['CACHE_DEFAULT_TIMEOUT']))
     return MemcachedCache(*args, **kwargs)
 
 def saslmemcached(app, config, args, kwargs):
     args.append(config['CACHE_MEMCACHED_SERVERS'])
     kwargs.update(dict(username=config['CACHE_MEMCACHED_USERNAME'],
                        password=config['CACHE_MEMCACHED_PASSWORD'],
-                       key_prefix=config['CACHE_KEY_PREFIX']))
+                       key_prefix=config['CACHE_KEY_PREFIX'],
+                       default_timeout=config['CACHE_DEFAULT_TIMEOUT']))
     return SASLMemcachedCache(*args, **kwargs)
 
 def gaememcached(app, config, args, kwargs):
-    kwargs.update(dict(key_prefix=config['CACHE_KEY_PREFIX']))
+    kwargs.update(dict(key_prefix=config['CACHE_KEY_PREFIX'],
+                       default_timeout=config['CACHE_DEFAULT_TIMEOUT']))
     return GAEMemcachedCache(*args, **kwargs)
 
 def filesystem(app, config, args, kwargs):
     args.insert(0, config['CACHE_DIR'])
-    kwargs.update(dict(threshold=config['CACHE_THRESHOLD']))
+    kwargs.update(dict(threshold=config['CACHE_THRESHOLD'],
+                       default_timeout=config['CACHE_DEFAULT_TIMEOUT']))
     return FileSystemCache(*args, **kwargs)
 
 # RedisCache is supported since Werkzeug 0.7.
@@ -61,6 +66,7 @@ else:
         kwargs.update(dict(
             host=config.get('CACHE_REDIS_HOST', 'localhost'),
             port=config.get('CACHE_REDIS_PORT', 6379),
+            default_timeout=config['CACHE_DEFAULT_TIMEOUT']
         ))
         password = config.get('CACHE_REDIS_PASSWORD')
         if password:
@@ -161,6 +167,7 @@ def spreadsaslmemcachedcache(app, config, args, kwargs):
     args.append(config['CACHE_MEMCACHED_SERVERS'])
     kwargs.update(dict(username=config.get('CACHE_MEMCACHED_USERNAME'),
                        password=config.get('CACHE_MEMCACHED_PASSWORD'),
-                     key_prefix=config.get('CACHE_KEY_PREFIX')
+                     key_prefix=config.get('CACHE_KEY_PREFIX'),
+                     default_timeout=config['CACHE_DEFAULT_TIMEOUT']
                   ))
     return SpreadSASLMemcachedCache(*args, **kwargs)
