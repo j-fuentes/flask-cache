@@ -138,7 +138,7 @@ class Cache(object):
             base_config.update(config)
         config = base_config
 
-        config.setdefault('CACHE_DEFAULT_TIMEOUT', None)
+        config.setdefault('CACHE_DEFAULT_TIMEOUT', 0)
         config.setdefault('CACHE_THRESHOLD', 500000)
         config.setdefault('CACHE_KEY_PREFIX', 'flask_cache_')
         config.setdefault('CACHE_MEMCACHED_SERVERS', None)
@@ -223,7 +223,7 @@ class Cache(object):
         "Proxy function for internal cache object."
         self.cache.set_many(*args, **kwargs)
 
-    def cached(self, timeout=None, key_prefix='view/%s', unless=None):
+    def cached(self, timeout=0, key_prefix='view/%s', unless=None):
         """
         Decorator. Use this to cache a function. By default the cache key
         is `view/request.path`. You are able to use this decorator with any
@@ -329,7 +329,7 @@ class Cache(object):
         return base64.b64encode(uuid.uuid4().bytes)[:6].decode('utf-8')
 
     def _memoize_version(self, f, args=None,
-                         reset=False, delete=False, timeout=None):
+                         reset=False, delete=False, timeout=0):
         """
         Updates the hash version associated with a memoized function or method.
         """
@@ -371,7 +371,7 @@ class Cache(object):
 
         return fname, ''.join(version_data_list)
 
-    def _memoize_make_cache_key(self, make_name=None, timeout=None):
+    def _memoize_make_cache_key(self, make_name=None, timeout=0):
         """
         Function used to create the cache_key for memoized functions.
         """
@@ -461,7 +461,7 @@ class Cache(object):
 
         return tuple(new_args), {}
 
-    def memoize(self, timeout=None, make_name=None, unless=None):
+    def memoize(self, timeout=0, make_name=None, unless=None):
         """
         Use this to cache the result of a function, taking its arguments into
         account in the cache key.

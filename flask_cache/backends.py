@@ -6,7 +6,7 @@ from ._compat import range_type
 
 class SASLMemcachedCache(MemcachedCache):
 
-    def __init__(self, servers=None, default_timeout=None, key_prefix=None,
+    def __init__(self, servers=None, default_timeout=0, key_prefix=None,
                  username=None, password=None):
         BaseCache.__init__(self, default_timeout)
 
