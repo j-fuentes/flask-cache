@@ -1,2 +1,2 @@
-git+git://github.com/j-fuentes/werkzeug@15b572fa9cba3043127f37b07297db9d041083a7#egg=werkzeug
+git+git://github.com/j-fuentes/werkzeug@9fe194e63d16739ec6eeb90eb6c24081e5ac6836#egg=werkzeug
 git+git://github.com/mitsuhiko/flask.git#egg=flask
