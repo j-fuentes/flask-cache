@@ -138,7 +138,7 @@ class Cache(object):
             base_config.update(config)
         config = base_config
 
-        config.setdefault('CACHE_DEFAULT_TIMEOUT', 300)
+        config.setdefault('CACHE_DEFAULT_TIMEOUT', 0)
         config.setdefault('CACHE_THRESHOLD', 500)
         config.setdefault('CACHE_KEY_PREFIX', 'flask_cache_')
         config.setdefault('CACHE_MEMCACHED_SERVERS', None)
