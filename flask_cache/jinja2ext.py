@@ -75,11 +75,6 @@ class CacheExtension(Extension):
 
         key = make_template_fragment_key(fragment_name, vary_on=vary_on)
 
-        #: Delete key if timeout is 'del'
-        if timeout == "del":
-            cache.delete(key)
-            return caller()
-
         rv = cache.get(key)
         if rv is None:
             rv = caller()
